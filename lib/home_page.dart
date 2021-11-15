@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications_example/details_page.dart';
-import 'package:intl/intl.dart';
 
 import 'widgets/action_buttons.dart';
 import 'widgets/custom_day_picker.dart';
@@ -43,17 +41,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DetailsPage(
-                    title: _textEditingController.text,
-                    eventDate: DateFormat("EEEE, d MMM y").format(eventDate!),
-                    eventTime: eventTime?.format(context),
-                  ),
-                ),
-              );
-            },
+            onPressed: () {},
             icon: Icon(Icons.library_books_rounded),
           ),
         ],
@@ -124,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 20.0),
                   ActionButtons(
                     onCreate: () {},
-                    onCancel: () {},
+                    onCancel: resetForm,
                   ),
                 ],
               ),
