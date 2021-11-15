@@ -2,7 +2,7 @@
     package="com.example.flutter_local_notifications_example">
    <application
         android:label="flutter_local_notifications_example"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
