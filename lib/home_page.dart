@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'details_page.dart';
 import 'widgets/action_buttons.dart';
 import 'widgets/custom_day_picker.dart';
 import 'widgets/date_field.dart';
@@ -41,7 +42,13 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DetailsPage(payload: null),
+                ),
+              );
+            },
             icon: Icon(Icons.library_books_rounded),
           ),
         ],
