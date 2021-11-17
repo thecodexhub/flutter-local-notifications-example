@@ -23,19 +23,18 @@ class DetailsPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (payload != null) _buildNotifiedReminderCard(payload!),
-            SizedBox(height: 16.0),
-            Text(
-              "Pending Notifications: ",
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.black54,
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Expanded(
-              child: Container(),
-            ),
+            if (payload == null)
+              Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text(
+                  "No reminders yet!",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black54,
+                  ),
+                ),
+              )
           ],
         ),
       ),

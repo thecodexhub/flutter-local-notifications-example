@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
 
 import 'details_page.dart';
+import 'services/notification_service.dart';
 import 'widgets/action_buttons.dart';
 import 'widgets/custom_day_picker.dart';
 import 'widgets/date_field.dart';
@@ -16,6 +21,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  NotificationService notificationService = NotificationService();
+
   final int maxTitleLength = 60;
   TextEditingController _textEditingController =
       TextEditingController(text: "Business meeting");
@@ -27,6 +34,39 @@ class _HomePageState extends State<HomePage> {
 
   TimeOfDay currentTime = TimeOfDay.now();
   TimeOfDay? eventTime;
+
+  Future<void> onCreate() async {
+    await notificationService.showNotification(
+      0,
+      _textEditingController.text,
+      "A new event has been created.",
+      jsonEncode({
+        "title": _textEditingController.text,
+        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+        "eventTime": eventTime!.format(context),
+      }),
+    );
+
+    await notificationService.scheduleNotification(
+      1,
+      _textEditingController.text,
+      "Reminder for your scheduled event at ${eventTime!.format(context)}",
+      eventDate!,
+      eventTime!,
+      jsonEncode({
+        "title": _textEditingController.text,
+        "eventDate": DateFormat("EEEE, d MMM y").format(eventDate!),
+        "eventTime": eventTime!.format(context),
+      }),
+      getDateTimeComponents(),
+    );
+
+    resetForm();
+  }
+
+  Future<void> cancelAllNotifications() async {
+    await notificationService.cancelAllNotifications();
+  }
 
   void resetForm() {
     segmentedControlGroupValue = 0;
@@ -118,8 +158,20 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(height: 20.0),
                   ActionButtons(
-                    onCreate: () {},
+                    onCreate: onCreate,
                     onCancel: resetForm,
+                  ),
+                  SizedBox(height: 12.0),
+                  GestureDetector(
+                    onTap: () async {
+                      await cancelAllNotifications();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("All notfications cancelled"),
+                        ),
+                      );
+                    },
+                    child: _buildCancelAllButton(),
                   ),
                 ],
               ),
@@ -130,21 +182,60 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildCancelAllButton() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.indigo[100],
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 24.0,
+        vertical: 12.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Cancel all the reminders",
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+            ),
+          ),
+          Icon(Icons.clear),
+        ],
+      ),
+    );
+  }
+
+  DateTimeComponents? getDateTimeComponents() {
+    if (segmentedControlGroupValue == 1) {
+      return DateTimeComponents.time;
+    } else if (segmentedControlGroupValue == 2) {
+      return DateTimeComponents.dayOfWeekAndTime;
+    }
+  }
+
   void selectEventDate() async {
+    final today =
+        DateTime(currentDate.year, currentDate.month, currentDate.day);
     if (segmentedControlGroupValue == 0) {
       eventDate = await showDatePicker(
         context: context,
-        initialDate:
-            new DateTime(currentDate.year, currentDate.month, currentDate.day),
-        firstDate:
-            new DateTime(currentDate.year, currentDate.month, currentDate.day),
+        initialDate: today,
+        firstDate: today,
         lastDate: new DateTime(currentDate.year + 10),
       );
       setState(() {});
+    } else if (segmentedControlGroupValue == 1) {
+      eventDate = today;
     } else if (segmentedControlGroupValue == 2) {
       CustomDayPicker(
         onDaySelect: (val) {
-          print(CustomDayPicker.weekdays[val]);
+          print("$val: ${CustomDayPicker.weekdays[val]}");
+          eventDate = today.add(
+              Duration(days: (val - today.weekday + 1) % DateTime.daysPerWeek));
         },
       ).show(context);
     }
