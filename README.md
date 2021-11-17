@@ -7,8 +7,8 @@ This project shows -
 - how to setup platform-specific initialization settings.
 - how to work with [flutter_local_noifications](https://pub.dev/packages/flutter_local_notifications) package.
 - how to display a notification.
-- how to schedule a notification.
-- cancel a single notification and all pendinng notifications.
+- how to schedule a notification and a recurring notification with daily or weekly interval.
+- how to cancel a single notification and all pendinng notifications.
 
 ## Preview
 
