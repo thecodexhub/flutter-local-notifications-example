@@ -10,6 +10,8 @@ This project shows -
 - how to schedule a notification and a recurring notification with daily or weekly interval.
 - how to cancel a single notification and all pendinng notifications.
 
+### Read the article [here on Medium](https://medium.com/@thecodexhubofficial/local-notifications-in-flutter-5e1e871a241c).
+
 ## Preview
 
 <img src="screenshots/ss.png" />
