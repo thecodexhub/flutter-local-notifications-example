@@ -12,6 +12,8 @@ This project shows -
 
 ### Read the article [here on Medium](https://medium.com/@thecodexhubofficial/local-notifications-in-flutter-5e1e871a241c).
 
+### Check the sample video [here on Instagram](https://www.instagram.com/p/CWbAXrfKLtc/?utm_source=ig_web_copy_link).
+
 ## Preview
 
 <img src="screenshots/ss.png" />
