@@ -23,9 +23,10 @@ class NotificationService {
 
   static final AndroidNotificationDetails _androidNotificationDetails =
       AndroidNotificationDetails(
-    "channelId",
-    "channelName",
-    channelDescription: "This is channel description",
+    channelId,
+    "thecodexhub",
+    channelDescription:
+        "This channel is responsible for all the local notifications",
     playSound: true,
     priority: Priority.high,
     importance: Importance.high,
